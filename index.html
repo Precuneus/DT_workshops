@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Who Are You?</title>
-<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://script.google.com/macros/s/AKfycbxY8d9oBC9OT3JiLQDlSdaHQ_D78oOi52FeF12ehllJCrU6iPizwsU-UKsa-vedvci7/exec" rel="stylesheet">
 <style>
   :root {
     --bg: #0a0a0a;
@@ -601,50 +601,27 @@ function setStars(category, value) {
 
 function submitFeedback() {
   var btn = document.getElementById('feedback-submit');
-  var errorEl = document.getElementById('feedback-error');
-  errorEl.classList.remove('active');
   btn.disabled = true;
   btn.textContent = 'Sending...';
 
   var text = document.getElementById('feedback-text').value.trim();
 
-  var iframe = document.createElement('iframe');
-  iframe.name = 'feedback-frame';
-  iframe.style.display = 'none';
-  document.body.appendChild(iframe);
+  var params = [
+    'timestamp=' + encodeURIComponent(new Date().toISOString()),
+    'puzzle1=' + encodeURIComponent(p1Answer || ''),
+    'puzzle2=' + encodeURIComponent(p2Answer || ''),
+    'rating_overall=' + feedbackData.overall,
+    'rating_questions=' + feedbackData.questions,
+    'rating_task=' + feedbackData.task,
+    'comments=' + encodeURIComponent(text)
+  ].join('&');
 
-  var form = document.createElement('form');
-  form.method = 'POST';
-  form.action = SHEET_URL;
-  form.target = 'feedback-frame';
-
-  var fields = {
-    timestamp: new Date().toISOString(),
-    puzzle1: p1Answer || '',
-    puzzle2: p2Answer || '',
-    rating_overall: feedbackData.overall,
-    rating_questions: feedbackData.questions,
-    rating_task: feedbackData.task,
-    comments: text
-  };
-
-  for (var key in fields) {
-    var input = document.createElement('input');
-    input.type = 'hidden';
-    input.name = key;
-    input.value = fields[key];
-    form.appendChild(input);
-  }
-
-  document.body.appendChild(form);
-  form.submit();
-
-  setTimeout(function() {
+  var img = new Image();
+  img.onload = img.onerror = function() {
     document.getElementById('feedback-form').style.display = 'none';
     document.getElementById('feedback-sent').classList.add('active');
-    form.remove();
-    iframe.remove();
-  }, 5000);
+  };
+  img.src = SHEET_URL + '?' + params;
 }
 
 function resetAll() {
