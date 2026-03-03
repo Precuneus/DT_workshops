@@ -616,12 +616,15 @@ function submitFeedback() {
     'comments=' + encodeURIComponent(text)
   ].join('&');
 
-  var img = new Image();
-  img.onload = img.onerror = function() {
-    document.getElementById('feedback-form').style.display = 'none';
-    document.getElementById('feedback-sent').classList.add('active');
-  };
-  img.src = SHEET_URL + '?' + params;
+  fetch(SHEET_URL + '?' + params, { mode: 'no-cors', redirect: 'follow' })
+    .then(function() {
+      document.getElementById('feedback-form').style.display = 'none';
+      document.getElementById('feedback-sent').classList.add('active');
+    })
+    .catch(function() {
+      document.getElementById('feedback-form').style.display = 'none';
+      document.getElementById('feedback-sent').classList.add('active');
+    });
 }
 
 function resetAll() {
