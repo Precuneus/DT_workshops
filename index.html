@@ -79,7 +79,6 @@
   }
 
   .btn-start:hover { background: var(--accent); transform: scale(1.02); }
-
   .btn-start:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
 
   .puzzle-number {
@@ -390,25 +389,18 @@
   }
 
   .btn-feedback-link:hover { border-color: var(--accent); color: var(--accent); }
-
-  .sending-text {
-    font-size: 0.9rem;
-    color: var(--dim);
-  }
 </style>
 </head>
 <body>
 
 <div class="progress-bar" id="progress" style="width: 0%"></div>
 
-<!-- LANDING -->
 <div class="screen active" id="screen-landing">
   <div class="landing-title">Who<br>Are <em>You?</em></div>
   <p class="landing-sub">Two questions. One task. Build something that shows the room who you are.</p>
   <button class="btn-start" onclick="goTo('screen-puzzle1')">Begin</button>
 </div>
 
-<!-- PUZZLE 1 -->
 <div class="screen" id="screen-puzzle1">
   <div class="puzzle-number">Question One</div>
   <div class="puzzle-prompt">Close your eyes for ten seconds. Imagine an apple.</div>
@@ -430,7 +422,6 @@
   </div>
 </div>
 
-<!-- GATE 1 -->
 <div class="screen" id="screen-gate1">
   <div class="waiting-icon">&#9679;</div>
   <div class="gate">
@@ -443,7 +434,6 @@
   </div>
 </div>
 
-<!-- PUZZLE 2 -->
 <div class="screen" id="screen-puzzle2">
   <div class="puzzle-number">Question Two</div>
   <div class="puzzle-prompt">Think about who you were three years ago.</div>
@@ -460,7 +450,6 @@
   </div>
 </div>
 
-<!-- GATE 2 -->
 <div class="screen" id="screen-gate2">
   <div class="waiting-icon">&#9679;</div>
   <div class="gate">
@@ -473,7 +462,6 @@
   </div>
 </div>
 
-<!-- TASK -->
 <div class="screen" id="screen-task">
   <div class="task-label">Your Task</div>
   <div class="task-text" id="task-text"></div>
@@ -483,7 +471,6 @@
   <button class="btn-feedback-link" onclick="goTo('screen-feedback')">Give feedback</button>
 </div>
 
-<!-- FEEDBACK -->
 <div class="screen" id="screen-feedback">
   <div class="puzzle-number">Feedback</div>
   <div class="puzzle-prompt">How was it?</div>
@@ -541,14 +528,9 @@ var p2Answer = null;
 var GATE1_CODE = 'imagine';
 var GATE2_CODE = 'life';
 
-// ===== GOOGLE SHEETS SETUP =====
-// 1. Create a Google Sheet
-// 2. Go to Extensions > Apps Script
-// 3. Paste the script from google_apps_script.js
-// 4. Deploy as web app (Execute as: Me, Access: Anyone)
-// 5. Paste the deployment URL below:
+// ===== PASTE YOUR GOOGLE APPS SCRIPT URL BELOW =====
 var SHEET_URL = 'https://script.google.com/macros/s/AKfycbxY8d9oBC9OT3JiLQDlSdaHQ_D78oOi52FeF12ehllJCrU6iPizwsU-UKsa-vedvci7/exec';
-// ================================
+// ====================================================
 
 var feedbackData = { overall: 0, questions: 0, task: 0 };
 
@@ -626,32 +608,43 @@ function submitFeedback() {
 
   var text = document.getElementById('feedback-text').value.trim();
 
-  var payload = {
+  var iframe = document.createElement('iframe');
+  iframe.name = 'feedback-frame';
+  iframe.style.display = 'none';
+  document.body.appendChild(iframe);
+
+  var form = document.createElement('form');
+  form.method = 'POST';
+  form.action = SHEET_URL;
+  form.target = 'feedback-frame';
+
+  var fields = {
     timestamp: new Date().toISOString(),
-    puzzle1: p1Answer,
-    puzzle2: p2Answer,
+    puzzle1: p1Answer || '',
+    puzzle2: p2Answer || '',
     rating_overall: feedbackData.overall,
     rating_questions: feedbackData.questions,
     rating_task: feedbackData.task,
     comments: text
   };
 
-  fetch(SHEET_URL, {
-    method: 'POST',
-    mode: 'no-cors',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(payload)
-  })
-  .then(function() {
+  for (var key in fields) {
+    var input = document.createElement('input');
+    input.type = 'hidden';
+    input.name = key;
+    input.value = fields[key];
+    form.appendChild(input);
+  }
+
+  document.body.appendChild(form);
+  form.submit();
+
+  setTimeout(function() {
     document.getElementById('feedback-form').style.display = 'none';
     document.getElementById('feedback-sent').classList.add('active');
-  })
-  .catch(function(err) {
-    console.error('Feedback error:', err);
-    errorEl.classList.add('active');
-    btn.disabled = false;
-    btn.textContent = 'Try again';
-  });
+    form.remove();
+    iframe.remove();
+  }, 1500);
 }
 
 function resetAll() {
