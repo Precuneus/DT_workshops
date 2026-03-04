@@ -457,6 +457,33 @@
     letter-spacing: 0.03em;
   }
 
+  .feedback-sending {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    padding: 2rem 0;
+  }
+
+  .spinner {
+    width: 28px;
+    height: 28px;
+    border: 2px solid var(--card-border);
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+
+  .sending-label {
+    font-size: 0.85rem;
+    color: var(--dim);
+    font-weight: 300;
+  }
+
   .qr-section {
     margin-top: 2.5rem;
     display: flex;
@@ -654,6 +681,11 @@
     <button class="btn-start" id="feedback-submit" onclick="submitFeedback()">Send feedback</button>
   </div>
 
+  <div class="feedback-sending" id="feedback-sending" style="display: none;">
+    <div class="spinner"></div>
+    <div class="sending-label">Sending your feedback...</div>
+  </div>
+
   <div class="feedback-sent" id="feedback-sent">
     <div class="feedback-check">&#10003;</div>
     <div class="feedback-thanks">Thank you!</div>
@@ -769,13 +801,16 @@ function submitFeedback() {
 
   fetch(SHEET_URL + '?' + params, { mode: 'no-cors', redirect: 'follow' })
     .then(function() {
-      document.getElementById('feedback-form').style.display = 'none';
+      document.getElementById('feedback-sending').style.display = 'none';
       document.getElementById('feedback-sent').classList.add('active');
     })
     .catch(function() {
-      document.getElementById('feedback-form').style.display = 'none';
+      document.getElementById('feedback-sending').style.display = 'none';
       document.getElementById('feedback-sent').classList.add('active');
     });
+
+  document.getElementById('feedback-form').style.display = 'none';
+  document.getElementById('feedback-sending').style.display = 'flex';
 }
 
 function resetAll() {
