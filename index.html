@@ -390,6 +390,42 @@
 
   .btn-feedback-link:hover { border-color: var(--accent); color: var(--accent); }
 
+  .summary-text {
+    max-width: 520px;
+    font-size: 0.95rem;
+    font-weight: 300;
+    line-height: 1.7;
+    color: var(--fg);
+    margin-bottom: 2rem;
+  }
+
+  .summary-text p {
+    margin-bottom: 1rem;
+  }
+
+  .summary-text strong {
+    color: var(--accent);
+    font-weight: 500;
+  }
+
+  .summary-keywords {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    justify-content: center;
+    max-width: 480px;
+    margin-bottom: 1rem;
+  }
+
+  .keyword {
+    font-size: 0.8rem;
+    font-weight: 400;
+    color: var(--accent);
+    border: 1px solid rgba(196, 168, 130, 0.3);
+    padding: 0.4rem 0.8rem;
+    letter-spacing: 0.03em;
+  }
+
   .qr-section {
     margin-top: 2.5rem;
     display: flex;
@@ -495,13 +531,47 @@
   <div class="task-rule">
     When you present: first explain who is your leader and why you chose them. Then tell the room about your artifact and why you built it this way. Do NOT reveal your answers. The other groups will try to guess.
   </div>
-  <button class="btn-feedback-link" onclick="goTo('screen-feedback')">Give feedback</button>
+  <button class="btn-feedback-link" onclick="goTo('screen-gate3')">Continue</button>
 </div>
 
-<div class="screen" id="screen-feedback">
-  <div class="puzzle-number">Feedback</div>
-  <div class="puzzle-prompt">How was it?</div>
+<div class="screen" id="screen-gate3">
+  <div class="waiting-icon">&#9679;</div>
+  <div class="gate">
+    <div class="gate-message">Wait for the summary.</div>
+    <div class="gate-sub">The facilitator will give you a code after presentations.</div>
+    <div class="gate-input-row">
+      <input type="text" class="gate-input" id="gate3-input" placeholder="code" autocomplete="off" onkeydown="if(event.key==='Enter')checkGate(3)">
+      <button class="gate-btn" onclick="checkGate(3)">Go</button>
+    </div>
+  </div>
+</div>
+
+<div class="screen" id="screen-summary">
+  <div class="puzzle-number">The Science Behind It</div>
+  <div class="puzzle-prompt">What just happened?</div>
   <div class="divider"></div>
+
+  <div class="summary-text">
+    <p>The apple question wasn't random. People genuinely differ in how they imagine. Some see vivid pictures. Some feel textures. Some think in words. And some experience pure concepts with no sensory content at all.</p>
+    <p>These differences are real and measurable. At the extremes:</p>
+    <p><strong>Aphantasia</strong> is the inability to form voluntary mental images. About 2-5% of people experience this. No pictures in the mind's eye, ever.</p>
+    <p><strong>Hyperphantasia</strong> is the opposite: extraordinarily vivid, almost photograph-like mental imagery.</p>
+    <p>The identity question connects to one of the oldest puzzles in philosophy: the <strong>Ship of Theseus</strong>. If you replace every plank of a ship, one by one, is it still the same ship? If every cell in your body is replaced, every belief updated, every habit changed... are you still you?</p>
+    <p>Your task was shaped by both answers. No group got the same challenge.</p>
+  </div>
+
+  <div class="summary-keywords">
+    <span class="keyword">aphantasia</span>
+    <span class="keyword">hyperphantasia</span>
+    <span class="keyword">mental imagery</span>
+    <span class="keyword">Ship of Theseus</span>
+    <span class="keyword">personal identity</span>
+    <span class="keyword">VVIQ</span>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="puzzle-prompt" style="font-size: clamp(1.1rem, 3vw, 1.4rem); margin-top: 1rem;">How was it?</div>
 
   <div class="feedback-form" id="feedback-form">
     <div class="feedback-question">How would you rate this workshop?</div>
@@ -554,6 +624,7 @@ var p2Answer = null;
 
 var GATE1_CODE = 'imagine';
 var GATE2_CODE = 'life';
+var GATE3_CODE = 'summary';
 
 // ===== PASTE YOUR GOOGLE APPS SCRIPT URL BELOW =====
 var SHEET_URL = 'https://script.google.com/macros/s/AKfycbxY8d9oBC9OT3JiLQDlSdaHQ_D78oOi52FeF12ehllJCrU6iPizwsU-UKsa-vedvci7/exec';
@@ -584,7 +655,7 @@ function goTo(screenId) {
   var screen = document.getElementById(screenId);
   void screen.offsetWidth;
   screen.classList.add('active');
-  var steps = { 'screen-landing': 0, 'screen-puzzle1': 15, 'screen-gate1': 30, 'screen-puzzle2': 45, 'screen-gate2': 60, 'screen-task': 75, 'screen-feedback': 100 };
+  var steps = { 'screen-landing': 0, 'screen-puzzle1': 12, 'screen-gate1': 25, 'screen-puzzle2': 37, 'screen-gate2': 50, 'screen-task': 62, 'screen-gate3': 75, 'screen-summary': 100 };
   document.getElementById('progress').style.width = (steps[screenId] || 0) + '%';
 }
 
@@ -605,10 +676,10 @@ function selectP2(answer) {
 function checkGate(n) {
   var input = document.getElementById('gate' + n + '-input');
   var code = input.value.trim().toLowerCase();
-  var correct = n === 1 ? GATE1_CODE : GATE2_CODE;
+  var correct = n === 1 ? GATE1_CODE : (n === 2 ? GATE2_CODE : GATE3_CODE);
   if (code === correct) {
     input.classList.remove('error');
-    goTo(n === 1 ? 'screen-puzzle2' : 'screen-task');
+    goTo(n === 1 ? 'screen-puzzle2' : (n === 2 ? 'screen-task' : 'screen-summary'));
   } else {
     input.classList.add('error');
     setTimeout(function() { input.classList.remove('error'); }, 400);
@@ -662,6 +733,7 @@ function resetAll() {
   feedbackData.task = 0;
   document.getElementById('gate1-input').value = '';
   document.getElementById('gate2-input').value = '';
+  document.getElementById('gate3-input').value = '';
   document.getElementById('feedback-text').value = '';
   document.getElementById('feedback-form').style.display = '';
   document.getElementById('feedback-sent').classList.remove('active');
