@@ -575,14 +575,8 @@
   <div class="task-rule">
     When you present: first explain who is your leader and why you chose them. Then tell the room about your artifact and why you built it this way. Do NOT reveal your answers. The other groups will try to guess.
   </div>
-  <button class="btn-feedback-link" onclick="goTo('screen-gate3')">Continue</button>
-</div>
-
-<div class="screen" id="screen-gate3">
-  <div class="waiting-icon">&#9679;</div>
-  <div class="gate">
-    <div class="gate-message">Wait for the summary.</div>
-    <div class="gate-sub">The facilitator will give you a code after presentations.</div>
+  <div class="gate" style="margin-top: 2rem;">
+    <div class="gate-sub">After presentations, the facilitator will give you a code.</div>
     <div class="gate-input-row">
       <input type="text" class="gate-input" id="gate3-input" placeholder="code" autocomplete="off" onkeydown="if(event.key==='Enter')checkGate(3)">
       <button class="gate-btn" onclick="checkGate(3)">Go</button>
@@ -600,17 +594,24 @@
     <p>These differences are real and measurable. At the extremes:</p>
     <p><strong>Aphantasia</strong> is the inability to form voluntary mental images. About 2-5% of people experience this. No pictures in the mind's eye, ever.</p>
     <p><strong>Hyperphantasia</strong> is the opposite: extraordinarily vivid, almost photograph-like mental imagery.</p>
+    <p>But imagery isn't just visual. Some people have no inner voice at all: <strong>anendophasia</strong>. Others hear a rich, constant inner monologue. Some people can mentally replay music note for note. Others can't hum a tune in their head.</p>
     <p>The identity question connects to one of the oldest puzzles in philosophy: the <strong>Ship of Theseus</strong>. If you replace every plank of a ship, one by one, is it still the same ship? If every cell in your body is replaced, every belief updated, every habit changed... are you still you?</p>
+  </div>
+
+  <div id="tailored-content" class="summary-text"></div>
+
+  <div class="summary-text">
     <p>Now you can start thinking about who you are and plan who you will become.</p>
   </div>
 
   <div class="summary-keywords">
     <span class="keyword">aphantasia</span>
     <span class="keyword">hyperphantasia</span>
-    <span class="keyword">mental imagery</span>
+    <span class="keyword">anendophasia</span>
+    <span class="keyword">inner speech</span>
+    <span class="keyword">VVIQ</span>
     <span class="keyword">Ship of Theseus</span>
     <span class="keyword">personal identity</span>
-    <span class="keyword">VVIQ</span>
   </div>
 
   <div class="divider"></div>
@@ -660,7 +661,6 @@
   </div>
 </div>
 
-<a class="reset-link" onclick="resetAll()">restart</a>
 
 <script>
 var p1Answer = null;
@@ -694,12 +694,21 @@ var tasks = {
   conceptual_mystery: "<p class=\"task-intro\">You think in concepts. The city was an idea, not an image or a sound. But when you turned that same thinking toward yourself, no category fit. You deal in definitions, and your own eludes you. You can label everything in the room except the person doing the labeling.</p>Build something that everyone in the room will immediately think they understand. They should be wrong. When you present, let them say what they think it is. Then show them what they missed."
 };
 
+var tailoredContent = {
+  visual: "<p><strong>Your group chose: Seeing.</strong></p><p>Your imagination leads with pictures. You're in good company: Nikola Tesla reported being able to visualize entire machines in complete detail before building them. He could mentally rotate them, test them, even spot flaws, all without touching paper.</p><p>At the far end of visual imagination sits <strong>hyperphantasia</strong>: imagery so vivid it can be mistaken for actual perception. At the other end, <strong>aphantasia</strong>: a completely blind mind's eye. Neither is a disorder. They're just different architectures of the same system.</p><p>The tool researchers use to measure this is the <strong>VVIQ</strong> (Vividness of Visual Imagery Questionnaire). You can find it online and test yourself.</p>",
+  auditory: "<p><strong>Your group chose: Hearing.</strong></p><p>Your imagination leads with sound. That inner voice, that ability to replay conversations or hear music in your head, is called <strong>inner speech</strong>, or endophasia. Most people report having it, but not everyone.</p><p><strong>Anendophasia</strong> is the absence of inner speech. Some people simply don't think in words. No narrator, no voice, no mental rehearsal of conversations. They think in other ways entirely.</p><p>Meanwhile, some people experience extraordinarily vivid auditory imagery. They can replay entire songs in their head with near-perfect fidelity, hearing each instrument distinctly. Beethoven composed some of his greatest works while completely deaf, working entirely from auditory imagination.</p>",
+  conceptual: "<p><strong>Your group chose: Knowing.</strong></p><p>Your imagination skipped the senses entirely and went straight to meaning. This is rarer than you might think, and it connects to something called <strong>unsymbolized thinking</strong>, a form of inner experience studied by psychologist Russell Hurlburt. Some people think without any words, images, or sounds at all. Pure knowing. Pure meaning without a medium.</p><p>This also connects to <strong>aphantasia</strong>: some people with aphantasia report that their thinking works exactly like yours did in this exercise. They know things without experiencing them sensorially. The information is there, complete and accessible, but it never becomes a picture or a sound.</p><p>Interestingly, many people with aphantasia are surprised to learn that others actually see things in their minds. They assumed \"picture this\" was always a metaphor.</p>"
+};
+
 function goTo(screenId) {
   document.querySelectorAll('.screen').forEach(function(s) { s.classList.remove('active'); });
   var screen = document.getElementById(screenId);
   void screen.offsetWidth;
   screen.classList.add('active');
-  var steps = { 'screen-landing': 0, 'screen-puzzle1': 12, 'screen-gate1': 25, 'screen-puzzle2': 37, 'screen-gate2': 50, 'screen-task': 62, 'screen-gate3': 75, 'screen-summary': 100 };
+  if (screenId === 'screen-summary' && p1Answer && tailoredContent[p1Answer]) {
+    document.getElementById('tailored-content').innerHTML = tailoredContent[p1Answer];
+  }
+  var steps = { 'screen-landing': 0, 'screen-puzzle1': 12, 'screen-gate1': 25, 'screen-puzzle2': 37, 'screen-gate2': 50, 'screen-task': 70, 'screen-summary': 100 };
   document.getElementById('progress').style.width = (steps[screenId] || 0) + '%';
 }
 
