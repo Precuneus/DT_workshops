@@ -245,6 +245,37 @@
     border: 1px solid rgba(196, 168, 130, 0.2);
   }
 
+  .task-intro {
+    font-size: 0.9rem;
+    font-weight: 300;
+    color: var(--dim);
+    line-height: 1.7;
+    margin-bottom: 1.5rem;
+    font-style: italic;
+  }
+
+  .meditation-script {
+    max-width: 520px;
+    font-size: 0.95rem;
+    font-weight: 300;
+    font-style: italic;
+    color: var(--fg);
+    line-height: 1.8;
+    margin-bottom: 1rem;
+  }
+
+  .meditation-script p {
+    margin-bottom: 0.8rem;
+  }
+
+  .script-instruction {
+    color: var(--accent);
+    font-style: normal;
+    font-weight: 400;
+    text-align: center;
+    margin-bottom: 1.5rem !important;
+  }
+
   .waiting-icon {
     font-size: 2rem;
     margin-bottom: 1.5rem;
@@ -466,21 +497,31 @@
 
 <div class="screen" id="screen-puzzle1">
   <div class="puzzle-number">Question One</div>
-  <div class="puzzle-prompt">Close your eyes for ten seconds. Imagine an apple.</div>
+  <div class="puzzle-prompt">The leader reads this aloud.</div>
   <div class="divider"></div>
-  <p class="puzzle-context">Now, honestly: what happened inside your head?</p>
+  <div class="meditation-script">
+    <p class="script-instruction">Everyone else: close your eyes and listen.</p>
+    <p>"Close your eyes. Take a breath. Now, go to a city center you know well. A real place you've actually been to. You're standing there right now.</p>
+    <p>Look around. Can you see the buildings? What color are they? Are there shop windows? What's in them? Look down at the pavement. Is it cobblestone? Concrete? Wet?</p>
+    <p>Now look further. Are there people? How are they moving? Is anyone sitting on a bench? Are there pigeons on the ground? Cars passing by?</p>
+    <p>Now listen. What do you hear? Traffic? Voices? Music from somewhere? Someone's heels on the pavement? A bus pulling away?</p>
+    <p>Now feel. What's the air like on your skin? Is it warm or cold? Is there wind? Can you feel the ground under your feet?</p>
+    <p>Now breathe in. What does it smell like? Coffee from a cafe? Exhaust? Rain? Bread from a bakery?</p>
+    <p>Stay there for a moment. Look around one more time.</p>
+    <p>Now open your eyes."</p>
+  </div>
+  <div class="divider"></div>
+  <p class="puzzle-context">Discuss this for a few minutes. Leader: listen to your group, try to relate to their experience. When you're ready, answer: what felt most important in the imagined experience?</p>
   <div class="options">
     <button class="option-btn" onclick="selectP1('visual')">
-      <span class="option-letter">A.</span> I saw it. A vivid picture: color, shape, maybe even light on the skin.
+      <span class="option-letter">A.</span> Seeing. The city was mostly a picture. Colors, shapes, light, movement.
     </button>
-    <button class="option-btn" onclick="selectP1('kinesthetic')">
-      <span class="option-letter">B.</span> I didn't really "see" anything, but I felt it: the weight in my hand, the texture, the crunch if I bit it.
-    </button>
-    <button class="option-btn" onclick="selectP1('verbal')">
-      <span class="option-letter">C.</span> I mostly heard the word "apple" in my head, or started describing it to myself in words.
+    <button class="option-btn" onclick="selectP1('auditory')">
+      <span class="option-letter">B.</span> Hearing. The city was mostly sound. Voices, traffic, footsteps, maybe music.
     </button>
     <button class="option-btn" onclick="selectP1('conceptual')">
-      <span class="option-letter">D.</span> I just... knew it was an apple. No image, no sound, no sensation. The concept was there, but nothing sensory.
+      <span class="option-letter">C.</span> Knowing. I knew I was there, but nothing sensory really showed up. The place was a fact, not an experience.
+    </button>
     </button>
   </div>
 </div>
@@ -509,6 +550,9 @@
     </button>
     <button class="option-btn" onclick="selectP2('lives')">
       <span class="option-letter">B.</span> Different lives. I've been several people already.
+    </button>
+    <button class="option-btn" onclick="selectP2('mystery')">
+      <span class="option-letter">C.</span> Mystery. I'm not even sure who I am now, let alone back then.
     </button>
   </div>
 </div>
@@ -552,7 +596,7 @@
   <div class="divider"></div>
 
   <div class="summary-text">
-    <p>The apple question wasn't random. People genuinely differ in how they imagine. Some see vivid pictures. Some feel textures. Some think in words. And some experience pure concepts with no sensory content at all.</p>
+    <p>The city exercise wasn't random. People genuinely differ in how they imagine. Some see vivid pictures. Some hear sounds first. And some experience pure concepts with no sensory content at all.</p>
     <p>These differences are real and measurable. At the extremes:</p>
     <p><strong>Aphantasia</strong> is the inability to form voluntary mental images. About 2-5% of people experience this. No pictures in the mind's eye, ever.</p>
     <p><strong>Hyperphantasia</strong> is the opposite: extraordinarily vivid, almost photograph-like mental imagery.</p>
@@ -633,21 +677,21 @@ var SHEET_URL = 'https://script.google.com/macros/s/AKfycbxY8d9oBC9OT3JiLQDlSdaH
 var feedbackData = { overall: 0, questions: 0, task: 0 };
 
 var puzzle2Contexts = {
-  visual: "Picture yourself back then. What did you look like? What were you wearing on a typical day? Can you see yourself in a place you used to spend time in?<br><br>Was that person you? Or someone you used to know?",
-  kinesthetic: "Feel yourself back then. How did your body feel waking up in the morning? What did it feel like to walk into the place you spent most of your time?<br><br>Was that person you? Or someone you used to know?",
-  verbal: "Hear yourself back then. What did your inner voice sound like? What were the sentences you kept repeating to yourself? What did you talk about most?<br><br>Was that person you? Or someone you used to know?",
+  visual: "Picture yourself there again. Now rewind three years. Picture yourself in a place you spent a lot of time back then. Look at yourself. What were you wearing? How did you stand? Can you see your own face?<br><br>Was that person you? Or someone you used to know?",
+  auditory: "Listen for yourself back then. What did your inner voice sound like three years ago? What did you talk about? What songs were stuck in your head? What did people say to you most often?<br><br>Was that person you? Or someone you used to know?",
   conceptual: "Think about yourself back then. What did you believe? What mattered to you? What were you sure about that you are no longer sure about now?<br><br>Was that person you? Or someone you used to know?"
 };
 
 var tasks = {
-  visual_chapters: "Build a self-portrait that contains your past, present, and future at once. Not three separate parts. One object where the three flow into each other so that no one can tell where one moment ends and another begins.",
-  visual_lives: "Build the door between two of your lives. Not a portrait of the person before or the person after. The threshold itself. The moment where one person's world ended and another person's world appeared.",
-  kinesthetic_chapters: "Build an object that feels like \"you\" when you hold it. Not what you look like. What you feel like. It must feel the same way you felt five years ago and the same way you will feel five years from now. When you present, let someone from another group hold it and describe what they feel.",
-  kinesthetic_lives: "Build two objects that fit in your hands. One belongs to someone you used to be. One belongs to who you are now. They must feel completely different to hold. When you present, pass them around without explaining which is which. Let the room guess.",
-  verbal_chapters: "Build one sentence about yourself as a physical object. Each word is a separate piece. The sentence must be something that has been true about you for as long as you can remember. When you present, read the sentence by pointing at each piece.",
-  verbal_lives: "Build two voices as two objects. They are two versions of you that disagree about something important. Place them facing each other. When you present, give each object one line of dialogue. Let the room hear the argument.",
-  conceptual_chapters: "Something about you has never changed, but nobody can see it. Build it. Make the invisible visible. When you present, show the object but do NOT say what it represents. Let the room figure it out.",
-  conceptual_lives: "Build the proof that you exist right now. Not yesterday's you, not tomorrow's you. The one sitting here in this room. No biography, no backstory. Only evidence that this version of you is real, right now."
+  visual_chapters: "<p class=\"task-intro\">You see in pictures. When you imagined that city, it appeared. The buildings, the colors, the people. And when you looked back at yourself three years ago, you saw the same person in different clothes, different rooms, but recognizably you. Your inner world is vivid, and your sense of self is stable. So build from that stability.</p>Build a self-portrait that contains your past, present, and future at once. Not three separate parts. One object where the three flow into each other so that no one can tell where one moment ends and another begins.",
+  visual_lives: "<p class=\"task-intro\">You see in pictures. The city appeared in your mind. But when you looked back at yourself three years ago, the person in that picture wasn't you. You can see them clearly, but they feel like someone else entirely. Your mind's eye works perfectly. It just shows you different people.</p>Build the door between two of your lives. Not a portrait of the person before or the person after. The threshold itself. The moment where one person's world ended and another person's world appeared.",
+  visual_mystery: "<p class=\"task-intro\">You see in pictures. The city appeared. But when you tried to picture yourself three years ago, the image wouldn't quite resolve. Your mind's eye works, but when you point it at yourself, the subject blurs. You can see everything except who is looking.</p>Build something that looks like a person but isn't finished. Not broken, not destroyed. Simply not yet resolved. When you present, let the room look at it and ask: is this person becoming something, or disappearing?",
+  auditory_chapters: "<p class=\"task-intro\">You think in sounds and words. When you imagined that city, you heard it. The traffic, the voices, the footsteps. And when you listened for yourself three years ago, the voice was the same. The words changed, the topics shifted, but the voice telling the story has always been yours. Same narrator, different chapters.</p>Build an object that sounds like you. Not what you say. How you sound. The rhythm, the tone, the tempo. When you present, don't explain it. Make the sound it represents and let the room listen.",
+  auditory_lives: "<p class=\"task-intro\">You think in sounds and words. The city was voices and traffic, not a picture. But when you listened for who you were three years ago, the voice was different. Not just different words. A different speaker. Your inner monologue has changed narrators.</p>Build two objects that make different sounds. One sounds like who you used to be. One sounds like who you are now. When you present, play both without saying which is which. Let the room guess.",
+  auditory_mystery: "<p class=\"task-intro\">You think in sounds and words. The city was something you heard inside your head. But when you tried to hear yourself three years ago, there was static. Your inner voice is there, but you're not sure whose voice it is.</p>Build something that only makes a sound when you interact with it in a way nobody expects. When you present, place it in front of the room in silence. Let them figure out how to make it speak.",
+  conceptual_chapters: "<p class=\"task-intro\">You think in categories, not pictures or sounds. The city was a concept: you knew it without seeing or hearing it. And when you thought about yourself three years ago, the category held. The definition of \"you\" hasn't needed updating. The facts changed. The concept didn't.</p>Something about you has never changed, but nobody can see it. Build it. Make the invisible visible. When you present, show the object but do NOT say what it represents. Let the room figure it out.",
+  conceptual_lives: "<p class=\"task-intro\">You think in concepts. The city was known, not seen or heard. And when you thought about who you were three years ago, the concept didn't match. The word \"you\" points to someone new now. Same label, different definition. You didn't change gradually. You were replaced.</p>Build the proof that you exist right now. Not yesterday's you, not tomorrow's you. The one sitting here in this room. No biography, no backstory. Only evidence that this version of you is real, right now.",
+  conceptual_mystery: "<p class=\"task-intro\">You think in concepts. The city was an idea, not an image or a sound. But when you turned that same thinking toward yourself, no category fit. You deal in definitions, and your own eludes you. You can label everything in the room except the person doing the labeling.</p>Build something that everyone in the room will immediately think they understand. They should be wrong. When you present, let them say what they think it is. Then show them what they missed."
 };
 
 function goTo(screenId) {
@@ -668,7 +712,7 @@ function selectP1(answer) {
 
 function selectP2(answer) {
   p2Answer = answer;
-  document.getElementById('task-text').textContent = tasks[p1Answer + '_' + p2Answer];
+  document.getElementById('task-text').innerHTML = tasks[p1Answer + '_' + p2Answer];
   goTo('screen-gate2');
   setTimeout(function() { document.getElementById('gate2-input').focus(); }, 600);
 }
